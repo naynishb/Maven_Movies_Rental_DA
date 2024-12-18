@@ -29,4 +29,4 @@ Highlight gaps in the inventory and optimize stock levels.
 
 
 # Tools & Library Used
-[<img src="./image/postgresql-logo.png" alt="python-logo" width="50"/>](https://www.postgresql.org/) &nbsp;
+[<img src=".Code_outputs/mysql_logo.png" alt="python-logo" width="50"/>](https://www.postgresql.org/) &nbsp;
