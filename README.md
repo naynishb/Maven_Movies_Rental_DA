@@ -30,3 +30,7 @@ Highlight gaps in the inventory and optimize stock levels.
 
 # Tools & Library Used
 [<img src="./Code_outputs/mysql_logo.png" alt="myql-logo" width="100"/>](https://www.mysql.com/) &nbsp;
+
+## Project Result
+
+[Click here to get full code](https://github.com/naynishb/Maven_Movies_Rental_DA/blob/02de175278240b4795c31b7747d675450f324c9a/maven_movies_rental_CODE.sql)
