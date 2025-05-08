@@ -178,3 +178,81 @@ CASE
     ELSE "ERROR"
 END AS MOVIE_LENGTH_CATEGORY
 FROM FILM;
+
+-- CATEGORIZING MOVIES TO RECOMMEND VARIOUS AGE GROUPS AND DEMOGRAPHIC
+
+SELECT DISTINCT TITLE,
+	CASE
+		WHEN RENTAL_DURATION <= 4 THEN 'RENTAL TOO SHORT'
+        WHEN RENTAL_RATE >= 3.99 THEN 'TOO EXPENSIVE'
+        WHEN RATING IN ('NC-17','R') THEN 'TOO ADULT'
+        WHEN LENGTH NOT BETWEEN 60 AND 90 THEN 'TOO SHORT OR TOO LONG'
+        WHEN DESCRIPTION LIKE '%Shark%' THEN 'NO_NO_HAS_SHARKS'
+        ELSE 'GREAT_RECOMMENDATION_FOR_CHILDREN'
+	END AS FIT_FOR_RECOMMENDATTION
+FROM FILM;
+
+-- “I’d like to know which store each customer goes to, and whether or
+-- not they are active. Could you pull a list of first and last names of all customers, and
+-- label them as either ‘store 1 active’, ‘store 1 inactive’, ‘store 2 active’, or ‘store 2 inactive’?”
+
+SELECT CUSTOMER_ID,FIRST_NAME,LAST_NAME,
+CASE
+	WHEN STORE_ID = 1 AND ACTIVE = 1 THEN "store 1 active"
+    WHEN STORE_ID = 1 AND ACTIVE = 0 THEN "store 1 inactive"
+    WHEN STORE_ID = 2 AND ACTIVE = 1 THEN "store 2 active"
+    WHEN STORE_ID = 2 AND ACTIVE = 0 THEN "store 2 inactive"
+    ELSE "ERROR"
+END AS STORE_AND_STATUS
+FROM CUSTOMER;
+
+-- “Can you pull for me a list of each film we have in inventory?
+-- I would like to see the film’s title, description, and the store_id value
+-- associated with each item, and its inventory_id. Thanks!”
+
+SELECT INV.INVENTORY_ID,INV.STORE_ID,F.TITLE,F.DESCRIPTION
+FROM INVENTORY AS INV INNER JOIN FILM AS F
+ON INV.FILM_ID = F.FILM_ID;
+
+-- Actor first_name, last_name and number of movies
+
+SELECT A.ACTOR_ID,A.FIRST_NAME,A.LAST_NAME,COUNT(*) AS NUMBER_OF_MOVIES
+FROM ACTOR AS A LEFT JOIN FILM_ACTOR AS FC
+ON A.ACTOR_ID = FC.ACTOR_ID
+GROUP BY A.ACTOR_ID;
+
+-- “One of our investors is interested in the films we carry and how many actors are listed for each
+-- film title. Can you pull a list of all titles, and figure out how many actors are
+-- associated with each title?”
+
+SELECT F.FILM_ID,F.TITLE,COUNT(*) AS NUMBER_OF_ACTORS
+FROM FILM AS F LEFT JOIN FILM_ACTOR AS FC
+ON F.FILM_ID = FC.FILM_ID
+GROUP BY F.FILM_ID;
+
+-- “Customers often ask which films their favorite actors appear in. It would be great to have a list of
+-- all actors, with each title that they appear in. Could you please pull that for me?”
+ 
+ SELECT A.ACTOR_ID,A.FIRST_NAME,A.LAST_NAME,F.TITLE
+ FROM ACTOR AS A LEFT JOIN FILM_ACTOR AS FC
+ ON A.ACTOR_ID = FC.ACTOR_ID LEFT JOIN FILM AS F
+ ON FC.FILM_ID = F.FILM_ID;
+ 
+ 
+ -- “The Manager from Store 2 is working on expanding our film collection there.
+-- Could you pull a list of distinct titles and their descriptions, currently available in inventory at store 2?”
+
+SELECT DISTINCT F.TITLE,F.DESCRIPTION
+FROM FILM AS F INNER JOIN INVENTORY AS INV
+ON F.FILM_ID = INV.FILM_ID
+WHERE INV.STORE_ID = 2;
+
+-- “We will be hosting a meeting with all of our staff and advisors soon. Could you pull one list of all staff
+-- and advisor names, and include a column noting whether they are a staff member or advisor? Thanks!”
+
+(SELECT FIRST_NAME,LAST_NAME,"STAFF_MEMBER" AS DESIGNATION
+FROM STAFF
+UNION
+SELECT FIRST_NAME,LAST_NAME,"ADVISOR" AS DESIGNATION
+FROM ADVISOR);
+
